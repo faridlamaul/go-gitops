@@ -44,9 +44,13 @@ cd go-gitops
 make install
 ```
 
-### Docker
+### Docker (GHCR)
+Pull the pre-built container image from GitHub Container Registry:
 ```bash
-docker build -t go-gitops:latest .
+docker pull ghcr.io/faridlamaul/go-gitops:latest
+
+# Run tag command inside container
+docker run --rm -e GITHUB_TOKEN=$GITHUB_TOKEN ghcr.io/faridlamaul/go-gitops:latest tag --repo owner/repo
 ```
 
 ---
