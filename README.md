@@ -109,22 +109,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-
-      - name: Install go-gitops
-        run: go install github.com/faridlamaul/go-gitops/cmd/github@latest
+      - name: Pull go-gitops container image
+        run: docker pull ghcr.io/faridlamaul/go-gitops:latest
 
       - name: Run Semantic Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
-          GITHUB_SHA: ${{ github.sha }}
         run: |
-          go-gitops tag
-```
+          docker run --rm \
+            -e GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            -e GITHUB_REPOSITORY="${{ github.repository }}" \
+            -e GITHUB_SHA="${{ github.sha }}" \
+            -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
+            ghcr.io/faridlamaul/go-gitops:latest tag
 
 ---
 
